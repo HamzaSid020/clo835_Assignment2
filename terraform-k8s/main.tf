@@ -1,3 +1,11 @@
+terraform {
+  backend "s3" {
+    bucket = "terraform-state-bucket-clo835"  # Replace with your S3 bucket name
+    key    = "terraform.tfstate"           # Path to the state file in the bucket
+    region = "us-east-1"                   # AWS region for the bucket
+  }
+}
+
 # Configure the AWS Provider
 provider "aws" {
   region = "us-east-1"  # Change to your preferred AWS region
@@ -98,7 +106,7 @@ resource "aws_security_group" "k8s_sg" {
 # Create an SSH key pair for instance access
 resource "aws_key_pair" "my_key_pair" {
   key_name   = "my-key-pair"  # Name of the key pair
-  public_key = file("~/.ssh/id_ed25519.pub")  # Path to the public key file
+  public_key = file("${path.module}/id_ed25519.pub")  # Path to the public key file
 }
 
 # Launch an EC2 instance for the Kubernetes node
