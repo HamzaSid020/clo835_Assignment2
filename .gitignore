@@ -13,6 +13,7 @@
 .terraformrc
 terraform.rc
 terraform-k8s/.terraform.lock.hcl
+terraform-k8s/
 
 # Crash log files
 crash.log
