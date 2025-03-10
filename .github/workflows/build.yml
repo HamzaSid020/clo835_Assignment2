@@ -36,10 +36,10 @@ jobs:
           echo "Checking if repositories exist"
           
           # Check for web app repo existence
-          aws ecr describe-repositories --repository-names my-web-app-repo --region ${{ secrets.AWS_REGION }} || aws ecr create-repository --repository-name my-web-app-repo --region ${{ secrets.AWS_REGION }}
+          aws ecr describe-repositories --repository-names web-app --region ${{ secrets.AWS_REGION }} || aws ecr create-repository --repository-name web-app --region ${{ secrets.AWS_REGION }}
           
           # Check for MySQL repo existence
-          aws ecr describe-repositories --repository-names mysql-repo --region ${{ secrets.AWS_REGION }} || aws ecr create-repository --repository-name mysql-repo --region ${{ secrets.AWS_REGION }}
+          aws ecr describe-repositories --repository-names mysql --region ${{ secrets.AWS_REGION }} || aws ecr create-repository --repository-name mysql --region ${{ secrets.AWS_REGION }}
         
       - name: Build Docker Images
         run: |
@@ -51,10 +51,10 @@ jobs:
       - name: Tag and Push to Amazon ECR
         run: |
           echo "Tagging webapp image"
-          docker tag webapp-image:latest ${{ secrets.ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/my-web-app-repo:latest
+          docker tag webapp-image:latest ${{ secrets.ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/web-app:latest
           echo "Tagging mysql image"
-          docker tag mysql-image:latest ${{ secrets.ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/mysql-repo:latest
+          docker tag mysql-image:latest ${{ secrets.ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/mysql:latest
           echo "Pushing webapp image to ECR"
-          docker push ${{ secrets.ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/my-web-app-repo:latest
+          docker push ${{ secrets.ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/web-app:latest
           echo "Pushing mysql image to ECR"
-          docker push ${{ secrets.ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/mysql-repo:latest
+          docker push ${{ secrets.ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/mysql:latest
