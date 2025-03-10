@@ -2,8 +2,9 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: mysql-deployment
+  namespace: mysql-ns
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: mysql
@@ -17,3 +18,4 @@ spec:
         image: 175534384170.dkr.ecr.us-east-1.amazonaws.com/assignment2/mysql:latest
         ports:
         - containerPort: 3306
+        imagePullPolicy: IfNotPresent
