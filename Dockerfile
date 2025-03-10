@@ -1,9 +1,6 @@
-FROM ubuntu:20.04
-RUN apt-get update -y && \
-    apt-get install -y python3-pip mysql-client && \
-    pip install --upgrade pip
-COPY . /app
+FROM python:3.9-slim
 WORKDIR /app
-RUN pip install -r requirements.txt
-EXPOSE 8080
+COPY . /app
+RUN pip install --no-cache-dir -r requirements.txt
+EXPOSE 80
 CMD ["python3", "app.py"]

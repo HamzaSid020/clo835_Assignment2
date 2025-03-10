@@ -1,5 +1,5 @@
 FROM mysql:8.0
-
-COPY ./mysql.sql /tmp
-
-CMD [ "mysqld", "--init-file=/tmp/mysql.sql" ]
+COPY mysql.sql /docker-entrypoint-initdb.d/
+ENV MYSQL_ROOT_PASSWORD=rootpassword
+ENV MYSQL_DATABASE=employees
+EXPOSE 3306

@@ -6,6 +6,8 @@ metadata:
   labels:
     app: employees
 spec:
+  imagePullSecrets:
+  - name: ecr-secret
   containers:
   - name: web-app
     image: 175534384170.dkr.ecr.us-east-1.amazonaws.com/assignment2/web-app:latest

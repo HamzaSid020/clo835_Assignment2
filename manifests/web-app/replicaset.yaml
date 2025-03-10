@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: ReplicaSet
 metadata:
   name: web-app-replicaset
-  namespace: web-ns
+  namespace: webapp-ns
   labels:
     app: employees
 spec:
@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: web-app
-        image: 175534384170.dkr.ecr.us-east-1.amazonaws.com/assignment2/web-app:latest
+        image: 175534384170.dkr.ecr.us-east-1.amazonaws.com/web-app:latest
         ports:
         - containerPort: 80
         imagePullPolicy: IfNotPresent

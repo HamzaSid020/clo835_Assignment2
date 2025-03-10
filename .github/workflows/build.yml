@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-  workflow_dispatch:  # Add this line to enable manual triggering
+  workflow_dispatch:
 
 jobs:
   build-and-push:
@@ -18,7 +18,7 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}  # Add this
+          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
           aws-region: ${{ secrets.AWS_REGION }}
         
       - name: Test AWS Credentials
@@ -34,27 +34,23 @@ jobs:
       - name: Check if ECR Repositories Exist and Create If Needed
         run: |
           echo "Checking if repositories exist"
-          
-          # Check for web app repo existence
-          aws ecr describe-repositories --repository-names web-app --region ${{ secrets.AWS_REGION }} || aws ecr create-repository --repository-name web-app --region ${{ secrets.AWS_REGION }}
-          
-          # Check for MySQL repo existence
-          aws ecr describe-repositories --repository-names mysql --region ${{ secrets.AWS_REGION }} || aws ecr create-repository --repository-name mysql --region ${{ secrets.AWS_REGION }}
+          aws ecr describe-repositories --repository-names assignment2/web-app --region ${{ secrets.AWS_REGION }} || aws ecr create-repository --repository-name assignment2/web-app --region ${{ secrets.AWS_REGION }}
+          aws ecr describe-repositories --repository-names assignment2/mysql --region ${{ secrets.AWS_REGION }} || aws ecr create-repository --repository-name assignment2/mysql --region ${{ secrets.AWS_REGION }}
         
       - name: Build Docker Images
         run: |
-          echo "Building webapp image"
-          docker build -t webapp-image -f Dockerfile .
-          echo "Building mysql image"
-          docker build -t mysql-image -f Dockerfile_mysql .
+          echo "Building web app image"
+          docker build -t assignment2-web-app -f Dockerfile .
+          echo "Building MySQL image"
+          docker build -t assignment2-mysql -f Dockerfile_mysql .
 
       - name: Tag and Push to Amazon ECR
         run: |
-          echo "Tagging webapp image"
-          docker tag webapp-image:latest ${{ secrets.ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/web-app:latest
-          echo "Tagging mysql image"
-          docker tag mysql-image:latest ${{ secrets.ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/mysql:latest
-          echo "Pushing webapp image to ECR"
-          docker push ${{ secrets.ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/web-app:latest
-          echo "Pushing mysql image to ECR"
-          docker push ${{ secrets.ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/mysql:latest
+          echo "Tagging web app image"
+          docker tag assignment2-web-app:latest ${{ secrets.ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/assignment2/web-app:latest
+          echo "Tagging MySQL image"
+          docker tag assignment2-mysql:latest ${{ secrets.ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/assignment2/mysql:latest
+          echo "Pushing web app image to ECR"
+          docker push ${{ secrets.ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/assignment2/web-app:latest
+          echo "Pushing MySQL image to ECR"
+          docker push ${{ secrets.ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/assignment2/mysql:latest
