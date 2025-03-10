@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: web-app-deployment
+  namespace: web-ns
 spec:
   replicas: 3
   selector:
@@ -17,3 +18,4 @@ spec:
         image: 175534384170.dkr.ecr.us-east-1.amazonaws.com/assignment2/web-app:latest
         ports:
         - containerPort: 80
+        imagePullPolicy: IfNotPresent

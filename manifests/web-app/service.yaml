@@ -2,6 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: web-app-service
+  namespace: web-ns
 spec:
   selector:
     app: employees
@@ -9,4 +10,5 @@ spec:
   - protocol: TCP
     port: 80
     targetPort: 80
+    nodePort: 30000
   type: NodePort
